@@ -55,7 +55,7 @@
     for (const prop in controls) {
       let control = controls[prop];
       control.addEventListener('input', function (prop) {
-        console.log(prop)
+        console.log(prop.target.value)
       });
     }
 
