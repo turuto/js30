@@ -43,6 +43,16 @@
     input {
       width: 100px;
     }
+
+    img {
+      --spacing: 0;
+      --blur: 0;
+      --spaceColor: #000;
+      border-style: solid;
+      border-width: var(--spacing);
+      border-color: var(--spaceColor);
+      filter: blur(var(--blur));
+    }
   </style>
 
   <script>
@@ -52,10 +62,29 @@
       blur: document.querySelector('#blur'),
       base: document.querySelector('#base')
     };
+    const image = document.querySelector('img');
     for (const prop in controls) {
       let control = controls[prop];
       control.addEventListener('input', function (prop) {
-        console.log(prop.target.value)
+        let elem = prop.target;
+        console.log(elem, elem.value)
+        switch (elem.id) {
+          case 'spacing':
+            //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor1
+            image.style.setProperty("--spacing", elem.value + elem.dataset.sizing);
+            break;
+          case 'blur':
+            //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor2
+            image.style.setProperty("--blur", elem.value + elem.dataset.sizing);
+            break;
+          case 'base':
+            image.style.setProperty("--spaceColor", elem.value);
+            //Declaraciones ejecutadas cuando el resultado de expresión coincide con valorN
+            break;
+          default:
+            break;
+        }
+
       });
     }
 
