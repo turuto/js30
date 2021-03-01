@@ -79,6 +79,10 @@
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .panel p {
@@ -86,14 +90,29 @@
       font-family: 'Amatic SC', cursive;
       text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
       font-size: 2em;
+      border: 1px solid red
+    }
+
+    .panel p:nth-child(1) {
+      transform: translateY(-100%);
+
     }
 
     .panel p:nth-child(2) {
       font-size: 4em;
     }
 
+    .panel p:nth-child(3) {
+      transform: translateY(100%);
+    }
+
     .panel.open {
       font-size: 40px;
+      flex: 5;
+    }
+
+    .panel.open-active p {
+      transform: translateY(0);
     }
   </style>
 
@@ -128,14 +147,19 @@
 
   <script>
     const panels = document.querySelectorAll('.panel');
-    panels.forEach(panel => panel.addEventListener('click', function () {
-      activeMe(this);
-
-    }));
-
-    function activeMe(elem) {
-      console.log(elem);
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleOpened));
+    function toggleOpen() {
+      this.classList.toggle('open');
     }
+
+    function toggleOpened(e) {
+      if (e.propertyName.includes('flex')) {
+        console.log(e.propertyName);
+        this.classList.toggle('open-active');
+      }
+    }
+
 
   </script>
 
