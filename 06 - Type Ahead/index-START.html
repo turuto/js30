@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <form class="search-form">
@@ -14,9 +16,64 @@
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    //GETTING THE DATA
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-</script>
+    const searchInput = document.querySelector('.search');
+    const suggestionList = document.querySelector('.suggestions');
+
+    async function getData() {
+      try {
+        let response = await fetch(endpoint);
+        let json = await response.json();
+        return json;
+      } catch (err) {
+        console.log('error: ', err);
+      }
+    }
+
+    let data;
+    getData().then(value => (data = value));
+
+
+    let newSearch = function () {
+      let searched = searchInput.value.toLowerCase();
+      if (data) {
+        let validOptions = data.filter(item => (item.city.toLowerCase().includes(searched) || item.state.toLowerCase().includes(searched)));
+        updateList(validOptions, searched);
+      }
+    }
+
+    function updateList(cities, searched) {
+      //removing the old items
+      suggestionList.innerHTML = '';
+      //add new nodes for items in cities
+      cities.forEach(item => {
+        let li = document.createElement('li');
+        li.textContent = `${item.city}, ${item.state}`;
+        highlightedLi = highlight(li, searched);
+        suggestionList.appendChild(highlightedLi);
+      });
+    }
+
+    function highlight(node, str) {
+      let reg = new RegExp(str, 'gi');
+      let newText = node.textContent.replace(reg, function (str) { return '<span class="hl">' + str + '</span>' });
+      node.innerHTML = newText;
+      return node;
+    }
+    //CAPTURING THE INPUT
+
+    searchInput.addEventListener('change', newSearch);
+    searchInput.addEventListener('keyup', newSearch);
+
+
+
+
+
+
+  </script>
 </body>
+
 </html>
