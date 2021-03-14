@@ -1,56 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Hold Shift to Check Multiple Checkboxes</title>
 </head>
+
 <body>
   <style>
+html {
+	background: #FFC600;
 
-    html {
-      font-family: sans-serif;
-      background: #ffc600;
-    }
+	font-family: sans-serif;
+}
 
-    .inbox {
-      max-width: 400px;
-      margin: 50px auto;
-      background: white;
-      border-radius: 5px;
-      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
-    }
+.inbox {
+	max-width: 400px;
+	margin: 50px auto;
 
-    .item {
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #F1F1F1;
-    }
+	border-radius: 5px;
+	background: white;
+	box-shadow: 10px 10px 0 rgba(0, 0, 0, .1);
+}
 
-    .item:last-child {
-      border-bottom: 0;
-    }
+.item {
+	display: flex;
+	align-items: center;
 
-    input:checked + p {
-      background: #F9F9F9;
-      text-decoration: line-through;
-    }
+	border-bottom: 1px solid #F1F1F1;
+}
 
-    input[type="checkbox"] {
-      margin: 20px;
-    }
+.item:last-child {
+	border-bottom: 0;
+}
 
-    p {
-      margin: 0;
-      padding: 20px;
-      transition: background 0.2s;
-      flex: 1;
-      font-family:'helvetica neue';
-      font-size: 20px;
-      font-weight: 200;
-      border-left: 1px solid #D1E2FF;
-    }
+input:checked + p {
+	text-decoration: line-through;
+
+	background: #F9F9F9;
+}
+
+input[type='checkbox'] {
+	margin: 20px;
+}
+
+p {
+	flex: 1;
+
+	margin: 0;
+	padding: 20px;
+
+	transition: background .2s;
+
+	border-left: 1px solid #D1E2FF;
+
+	font-family: 'helvetica neue';
+	font-size: 20px;
+	font-weight: 200;
+}
+
   </style>
-   <!--
+  <!--
    The following is a common layout you would see in an email client.
 
    When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
@@ -95,7 +105,43 @@
     </div>
   </div>
 
-<script>
-</script>
+  <script>
+    let lastClicked = 0;
+    const inbox = document.querySelector('.inbox');
+    inbox.addEventListener('click', (e) => {
+      let elementClicked = e.target;
+      let checkbox = elementClicked.localName === 'p' ? elementClicked.previousElementSibling : elementClicked;
+      checkbox.checked = !checkbox.checked;
+      //cual hemos clicado?
+      // let currentClicked = getIndex(inbox, checkbox.parentNode);
+      let currentClicked = [...inbox.children].findIndex(item => item === checkbox.parentNode)
+
+      if (e.shiftKey) {
+        // tenemos pulsada SHIFT
+        console.log('CLICK + SHIFT');
+        //cuantos marcamos?
+        //con esto, hacemos un array y lo rellenamos de los num intermedios
+        let init = Math.min(lastClicked, currentClicked)
+        let end = Math.max(lastClicked, currentClicked)
+        //y marcamos los checkboxes esos
+        for (let i = init; i <= end; i++) {
+          let element = inbox.children[i].querySelector('input');
+          element.checked = checkbox.checked;
+        }
+      }
+      lastClicked = currentClicked;
+    })
+
+    function getIndex(element, child) {
+      for (let i = 0; i <= element.children.length; i++) {
+        if (element.children[i] === child) {
+          return i;
+        }
+      }
+    }
+
+
+  </script>
 </body>
+
 </html>
