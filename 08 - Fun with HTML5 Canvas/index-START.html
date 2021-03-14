@@ -1,19 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>HTML5 Canvas</title>
 </head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+<body>
+  <canvas id="draw" width="800" height="800"></canvas>
+  <script>
+    const canvas = document.querySelector('#draw');
+    const ctx = canvas.getContext('2d');
+    const maxRad = 20;
+    const minRad = 0;
+    let lightness = 50;
+    let saturation = 100;
+    let hue = 0;
+    let isDrawing = false;
+    let radius;
+    let ang = 0;
+
+    const draw = function (e) {
+
+      if (isDrawing) {
+        //model
+        let posx = e.offsetX;
+        let posy = e.offsetY;
+        ang++;
+        let variation = 0.5 + Math.sin(ang) / 2;
+        radius = minRad + (maxRad - minRad) * variation;
+        console.log(radius);
+        //representation
+        ctx.beginPath();
+        ctx.arc(posx, posy, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = `hsl( ${ang},${saturation}%,${lightness}%)`;
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+    const toggleDraw = function (state) {
+
+      isDrawing = state;
+      if (isDrawing) {
+        ang = 0;
+        saturation = Math.random() * 100;
+        lightness = Math.random() * 100;
+      }
+    }
+
+    // add listeners
+    canvas.addEventListener('mousedown', () => toggleDraw(true))
+    canvas.addEventListener('mousemove', (e) => draw(e))
+    canvas.addEventListener('mouseup', () => toggleDraw(false))
+    canvas.addEventListener('mouseout', () => toggleDraw(false))
+
+
+  </script>
+  <style>
+html,
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	margin: 0;
+}
+
+canvas {
+	border: 1px solid red;
+}
+
+  </style>
 
 </body>
+
 </html>
