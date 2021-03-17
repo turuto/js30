@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Key Detection</title>
   <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
 </head>
+
 <body>
-<script>
-</script>
+  <script>
+    const pressed = [];
+    const secretCode = 'wesbos';
+
+    function addLetter(e) {
+      const letter = String.fromCharCode(e.keyCode);
+      pressed.push(letter);
+      checkCode();
+    }
+
+    function checkCode() {
+      let onlyCheckableKeys = pressed;
+      if (pressed.length > secretCode.length) {
+        onlyCheckableKeys = pressed.slice(pressed.length - secretCode.length)
+      }
+      const attempt = onlyCheckableKeys.join('');
+      if (attempt === secretCode) {
+        console.log('YOUFOUNDIT!!!')
+      }
+    }
+
+    window.addEventListener('keypress', addLetter);
+  </script>
 </body>
+
 </html>
