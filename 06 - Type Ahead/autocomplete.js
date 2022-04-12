@@ -62,7 +62,8 @@ export class Autocomplete {
     }
 
     buildList(arr, strToHighLight) {
-        if (arr.length === 0) {
+        console.log(arr.length)
+        if (arr.length === 0 || strToHighLight === '') {
             this.suggestionList.innerHTML = PLACEHOLDER;
         } else {
             this.suggestionList.innerHTML = '';
