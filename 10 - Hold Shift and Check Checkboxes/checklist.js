@@ -29,7 +29,6 @@ export class CheckboxList {
 
         document.addEventListener('keyup', e => {
             if (!e.shiftKey) {
-                console.log('SHIFT UP')
                 this.isShiftPressed = false
             }
         })
@@ -55,5 +54,4 @@ export class CheckboxList {
             interItem.querySelector('input').setAttribute('checked', '');
         }
     }
-
 }
