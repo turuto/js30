@@ -18,7 +18,7 @@ body {
 	padding: 0;
 
 	background: #7A419B;
-	background: linear-gradient(135deg, #7C1599 0%,#921099 48%,#7E4AE8 100%);
+	background: linear-gradient(135deg, #7C1599 0%, #921099 48%, #7E4AE8 100%);
 	background-size: cover;
 }
 
@@ -29,8 +29,8 @@ body {
 
 	max-width: 750px;
 
-	border: 5px solid rgba(0,0,0,.2);
-	box-shadow: 0 0 20px rgba(0,0,0,.2);
+	border: 5px solid rgba(0, 0, 0, .2);
+	box-shadow: 0 0 20px rgba(0, 0, 0, .2);
 
 	font-size: 0;
 }
@@ -86,7 +86,7 @@ body {
 	transition: all .3s;
 	transform: translateY(100%) translateY(-5px);
 
-	background: rgba(0,0,0,.1);
+	background: rgba(0, 0, 0, .1);
 }
 
 .player:hover .player__controls {
@@ -113,16 +113,17 @@ body {
 	cursor: ew-resize;
 	transition: height .3s;
 
-	background: rgba(0,0,0,.5);
+	background: rgba(0, 0, 0, .5);
 }
 
 .progress__filled {
-	flex: 0;
-	flex-basis: 0;
-
-	width: 0;
+	/*flex: 0;
+	flex-basis: 0;*/
+	width: var(--progress);
 
 	background: #FFC600;
+
+	--progress: 0;
 }
 
 /* unholy css to style input type="range" */
@@ -148,7 +149,7 @@ input[type=range]::-webkit-slider-runnable-track {
 
 	border: .2px solid rgba(1, 1, 1, 0);
 	border-radius: 1.3px;
-	background: rgba(255,255,255,.8);
+	background: rgba(255, 255, 255, .8);
 	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0), 0 0 1px rgba(13, 13, 13, 0);
 }
 
@@ -161,7 +162,7 @@ input[type=range]::-webkit-slider-thumb {
 
 	border-radius: 50px;
 	background: #FFC600;
-	box-shadow: 0 0 2px rgba(0,0,0,.2);
+	box-shadow: 0 0 2px rgba(0, 0, 0, .2);
 
 	-webkit-appearance: none;
 }
