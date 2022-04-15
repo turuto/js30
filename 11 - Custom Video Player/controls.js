@@ -88,5 +88,4 @@ export class Controls {
             this.updateVideo(time);
         }
     }
-
 }
