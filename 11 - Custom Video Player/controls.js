@@ -2,6 +2,7 @@ export class Controls {
     constructor(video, videoUI) {
         this.video = video;
         this.videoUI = videoUI;
+        this.isScrubbing = false;
         this.init();
     }
 
@@ -11,7 +12,7 @@ export class Controls {
     }
 
     createElements = function () {
-        this.progressBarEl = this.videoUI.querySelector('.progress__filled');
+        this.progressBarEl = this.videoUI.querySelector('.progress');
         this.playBtnEl = this.videoUI.querySelector('.toggle');
         this.volumeEl = this.videoUI.querySelector('[name="volume"]');
         this.speedEl = this.videoUI.querySelector('[name="playbackRate"]');
@@ -21,11 +22,15 @@ export class Controls {
 
     createListeners = function () {
         this.playBtnEl.addEventListener('click', this.togglePlay.bind(this));
+        this.video.addEventListener('click', this.togglePlay.bind(this));
         this.volumeEl.addEventListener('change', this.setVolume.bind(this));
         this.speedEl.addEventListener('change', this.setSpeed.bind(this));
-        this.skipBackEl.addEventListener('click', e => this.skip(e));
-        this.skipFwdEl.addEventListener('click', e => this.skip(e));
-        this.video.addEventListener('timeupdate', this.updateProgressBar.bind(this));
+        this.skipBackEl.addEventListener('click', e => this.handleSskip(e));
+        this.skipFwdEl.addEventListener('click', e => this.handleSkip(e));
+        this.video.addEventListener('timeupdate', this.handleProgressBar.bind(this));
+        this.progressBarEl.addEventListener('mousedown', this.toggleScrubbing.bind(this));
+        this.progressBarEl.addEventListener('mouseup', this.toggleScrubbing.bind(this));
+        this.progressBarEl.addEventListener('mousemove', e => this.scrub(e));
     }
 
     togglePlay = function () {
@@ -44,21 +49,44 @@ export class Controls {
         this.video.playbackRate = this.speedEl.value;
     }
 
-    skip = function (e) {
+    handleSkip = function (e) {
         const skip = e.target.dataset.skip;
         let desiredTime = this.video.currentTime + parseInt(skip, 10);
+        this.updateVideo(desiredTime);
+    }
 
-        if (desiredTime < 0) {
+    updateVideo = function (time) {
+        if (time < 0) {
             this.video.currentTime = 0;
-        } else if (desiredTime > this.video.duration) {
+        } else if (time > this.video.duration) {
             this.video.currentTime = this.video.duration;
         } else {
-            this.video.currentTime = desiredTime;
+            this.video.currentTime = time;
         }
     }
 
-    updateProgressBar = function () {
-        const percentage = (this.video.currentTime / this.video.duration) * 100;
-        this.progressBarEl.style.setProperty('--progress', `${percentage}%`);
+    handleProgressBar = function () {
+        const percent = (this.video.currentTime / this.video.duration) * 100;
+        this.updateProgressBar(percent);
     }
+
+    updateProgressBar = function (percent) {
+        const barFilledEl = this.progressBarEl.querySelector('.progress__filled');
+        barFilledEl.style.setProperty('--progress', `${percent}%`);
+    }
+
+    toggleScrubbing = function () {
+        this.isScrubbing = !this.isScrubbing;
+    }
+
+    scrub = function (e) {
+        if (this.isScrubbing) {
+            const totalWidth = this.progressBarEl.offsetWidth;
+            const percent = (e.offsetX / totalWidth) * 100;
+            const time = this.video.duration * percent / 100;
+            this.updateProgressBar(percent);
+            this.updateVideo(time);
+        }
+    }
+
 }
