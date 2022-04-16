@@ -24,6 +24,7 @@
         onlyCheckableKeys = pressed.slice(pressed.length - secretCode.length)
       }
       const attempt = onlyCheckableKeys.join('');
+      console.log(onlyCheckableKeys, attempt);
       if (attempt === secretCode) {
         console.log('YOUFOUNDIT!!!')
       }
