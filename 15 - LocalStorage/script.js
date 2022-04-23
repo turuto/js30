@@ -2,6 +2,7 @@
 const pageForm = document.querySelector('.add-items');
 const input = document.querySelector('input[type="text"]')
 const itemsList = document.querySelector('.plates');
+const clearBtn = document.querySelector('#clear');
 const tapasStorage = window.localStorage;
 let items = [];
 
@@ -14,6 +15,7 @@ if (tapasStored) {
 }
 
 pageForm.addEventListener('submit', addItem);
+clearBtn.addEventListener('click', clearList);
 itemsList.addEventListener('click', e => {
     toggleItemChecked(e);
 })
@@ -78,4 +80,10 @@ function updateStorage() {
 
 //TODO
 // 1. boton de clearList
+function clearList() {
+    items = [];
+    tapasStorage.clear();
+    removeLoading();
+
+}
 // 2. Boton de check all /uncheck all
